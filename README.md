@@ -14,7 +14,7 @@ In this project I extracted my chess games data using the Lichess API, then clea
 
 - **`load.py`**: Defines the `load` task that loads the transformed data into a PostgreSQL database. It uses SQL queries to insert the data into the `games` table and handles conflicts by ignoring duplicate entries.
 
-- **`database_creation.py`**: Contains scripts for setting up the PostgreSQL database and creating the necessary tables. It ensures that the database and table are created if they don't already exist.
+- **`setup_database.py`**: Contains scripts for setting up the PostgreSQL database and creating the necessary tables. It ensures that the database and table are created if they don't already exist.
 
 - **`Chess_Dashboard`**: A Power BI file that contains interactive visualizations and dashboards for exploring and analyzing the chess game data. This dashboard connects to the PostgreSQL database and provides insights into various aspects of the games.
 
@@ -47,7 +47,7 @@ In this project I extracted my chess games data using the Lichess API, then clea
 
 4. **Setup PostgreSQL**:
    - Configure the `setup_database.py` with your PostgreSQL credentials.
-   - Run `database_creation.py` to create the database and table.
+   - Run `setup_database.py` to create the database and table.
 
 5. **Configure Airflow**:
    - Set up Airflow with the appropriate configurations and environment variables.
