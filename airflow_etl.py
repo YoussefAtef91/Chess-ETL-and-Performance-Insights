@@ -10,15 +10,15 @@ from load import load
 # Define default arguments for the DAG
 default_args = {
     'owner': 'Youssef Atef',
-    'retries': 5,
-    'retry_delay': timedelta(minutes=5)
+    'retries': 10,
+    'retry_delay': timedelta(minutes=3)
 }
 
 # Define the DAG with its attributes
 @dag(default_args=default_args,
      dag_id='chess_etl_dag',
      description='a dag to automate the chess etl process',
-     start_date=datetime(2024, 7, 27),
+     start_date=datetime(2020, 5, 1),
      schedule_interval='@daily',
      catchup=False) # Prevent backfilling if DAG start date is in the past
 def ETL():

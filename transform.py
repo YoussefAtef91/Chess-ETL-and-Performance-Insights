@@ -72,9 +72,9 @@ def transform(data):
     if 'BlackRatingDiff' not in df.columns and 'WhiteRatingDiff' not in df.columns:
         df['BlackRatingDiff'] = np.zeros(len(df))
         df['WhiteRatingDiff'] = np.zeros(len(df))
+    df[['WhiteRatingDiff','BlackRatingDiff']] = df[['WhiteRatingDiff','BlackRatingDiff']].fillna(0)
     df['MyRatingDiff'] = df.apply(lambda x: x.WhiteRatingDiff if x.PiecesColor=='White' else x.BlackRatingDiff, axis=1).astype(int)
     df['OpponentRatingDiff'] = df.apply(lambda x: x.WhiteRatingDiff if x.PiecesColor=='Black' else x.BlackRatingDiff, axis=1).astype(int)
-    df[['MyRatingDiff','OpponentRatingDiff']] = df[['MyRatingDiff','OpponentRatingDiff']].fillna(0)
     df['MyRatingDiff'] = df['MyRatingDiff'].apply(lambda x: str(x).replace("+" ,"")).astype(int)
     df['OpponentRatingDiff'] = df['OpponentRatingDiff'].apply(lambda x: str(x).replace("+" ,"")).astype(int)
 
@@ -93,6 +93,12 @@ def transform(data):
     columns_to_drop = ['White','Black','Winner','WhiteTitle','BlackTitle', 'WhiteRatingDiff','BlackRatingDiff',
                         'Event','Date','UTCDate','UTCTime','WhiteElo','BlackElo']
     df.drop(columns_to_drop,axis=1,inplace=True)
+
+    if 'FEN' in df.columns:
+        df.drop('FEN', axis=1, inplace=True)
+
+    if 'SetUp' in df.columns:
+        df.drop('SetUp', axis=1, inplace=True)
 
     # Rename the site column to GameUrl
     df.rename({"Site":"GameUrl"},axis=1, inplace=True)
