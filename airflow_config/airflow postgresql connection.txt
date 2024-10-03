@@ -1,0 +1,5 @@
+Connection ID: postgres_localhost
+Connection Type: Postgres
+Host: host.docker.internal
+schema: chess
+port: 5432
