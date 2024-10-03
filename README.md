@@ -79,9 +79,15 @@ Chess-ETL
 5. **Configure Airflow**:
    - Set up Airflow with the appropriate configurations and environment variables.
    - Add the DAG `./dags/etl.py` to your Airflow instance.
-   - Build the docker-compose.yaml using ```docker-compose build``` command.
+   - Build the docker-compose.yaml using this command
+     ```bash
+     docker-compose build
+     ```
    - Create an admin user and create a postgresql connection, check the files in ```./airflow_config```.
-   - Run the airflow using ```docker-compose up -d``` command.
+   - Run the airflow using this command.
+     ```bash
+     docker-compose up -d
+     ```
    - Navigate to ```http://localhost:8080/``` to track the workflow.
 
 6. **Power BI Dashboard**:
