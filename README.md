@@ -52,6 +52,7 @@ Chess-ETL
 - requests==2.32.3
 - SQLAlchemy==2.0.31
 - typing_extensions==4.12.2
+- python-chess=0.2.0
 ```
 ## Installation
 
