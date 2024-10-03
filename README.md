@@ -1,31 +1,58 @@
-# Chess ETL Pipeline
+# Chess ETL and Performance Insights
 
 ## Overview
 
-In this project I extracted my chess games data using the Lichess API, then cleaned and transformed the data using Python's Pandas library. Then loaded the processed data into a PostgreSQL database. The entire workflow is automated daily using Apache Airflow. Finally, I used Power BI to create an interactive dashboard for analyzing and visualizing my chess performance, providing valuable insights into game statistics and trends.
+In this project, I extracted my online chess games data using Lichess API and Chess.com API, then cleaned and transformed the data using Python's Pandas. Then ran the transformed data through validation checks. Then loaded the validated data into a PostgreSQL database. The entire workflow is automated daily using Apache Airflow. Finally, I used Power BI to create an interactive dashboard for analyzing and visualizing my chess performance, providing valuable insights into game statistics and trends.
 
 ## Project Structure
-
-- **`airflow_dag.py`**: Contains the Airflow DAG for orchestrating the ETL process. The DAG consists of tasks for extracting data from Lichess, transforming it into a suitable format, and loading it into a PostgreSQL database.
-
-- **`extract.py`**: Defines the `extract` task that retrieves chess game data from the Lichess API. It supports fetching data based on date ranges specified by Airflow variables.
-
-- **`transform.py`**: Defines the `transform` task that processes the raw PGN data, converts it into a DataFrame, and performs necessary data transformations, including calculating game attributes and formatting dates.
-
-- **`load.py`**: Defines the `load` task that loads the transformed data into a PostgreSQL database. It uses SQL queries to insert the data into the `games` table and handles conflicts by ignoring duplicate entries.
-
-- **`setup_database.py`**: Contains scripts for setting up the PostgreSQL database and creating the necessary tables. It ensures that the database and table are created if they don't already exist.
-
-- **`Chess_Dashboard`**: A Power BI file that contains interactive visualizations and dashboards for exploring and analyzing the chess game data. This dashboard connects to the PostgreSQL database and provides insights into various aspects of the games.
-
+```
+Chess-ETL  
+├───dags  
+│   │   .env # Contains the environment variables  
+│   │   etl.py # Contains the dag of the workflow  
+│   │  
+│   └───tasks # Contains the tasks of the workflow  
+│       ├───chesscom  
+│       │       chesscom_extract.py # Contains the task to extract the Chess.com data  
+│       │       chesscom_transform.py # Contains the task to transform the extracted Chess.com data  
+│       │  
+│       ├───lichess  
+│       │       lichess_extract.py # Contains the task to extract the Lichess data  
+│       │       lichess_transform.py # Contains the task to transform the extracted Lichess data  
+│       │  
+│       ├───validation  
+│       │       quality_check.py # Contains the task to validate the transformed data  
+|       |       validations.py # Contains the validation check functions used in the quality_check task  
+│       │  
+│       └───load
+│               load.py # Containes the task to load the validated data into the PostgreSQL  
+|  
+├───dashboard  
+│       Chess-Insights.pbix # A Power BI dashboard connected to PostgreSQL Database  
+│  
+├───data  
+│       Openings.csv # A csv of the openings names and their eco code for the database creation  
+│  
+├───database  
+│       ChessSchema.sql # An SQL script to create the database schema  
+│  
+└───intial load  
+        chesscom_initial_load.py # A script to initially load all the Chess.com games before starting the workflow  
+        lichess_initial_load.py # A script to initially load all the Lichess games before starting the workflow  
+```
 ## Prerequisites
-
-- Python 3.x
-- PostgreSQL
-- Apache Airflow
-- Power BI
-- Python libraries: `requests`, `pandas`, `numpy`, `psycopg2`, `dotenv`, `pytz`
-
+```
+- numpy==2.0.1
+- pandas==2.2.2
+- apache-airflow==2.6.1
+- psycopg2-binary==2.9.9
+- python-dateutil==2.9.0.post0
+- python-dotenv==1.0.1
+- pytz==2024.1
+- requests==2.32.3
+- SQLAlchemy==2.0.31
+- typing_extensions==4.12.2
+```
 ## Installation
 
 1. **Clone the Repository**:
@@ -46,29 +73,47 @@ In this project I extracted my chess games data using the Lichess API, then clea
    ```
 
 4. **Setup PostgreSQL**:
-   - Configure the `setup_database.py` with your PostgreSQL credentials.
-   - Run `setup_database.py` to create the database and table.
+   - Run the ```./database/ChessSchema.sql``` in PostgreSQL.
+   - Run the two scripts in the ```initial_load``` folder, and remember to change the usernames in both files with yours.
 
 5. **Configure Airflow**:
    - Set up Airflow with the appropriate configurations and environment variables.
-   - Add the DAG from `airflow_dag.py` to your Airflow instance.
+   - Add the DAG `./dags/etl.py` to your Airflow instance.
+   - Build the docker-compose.yaml using ```docker-compose build``` command.
+   - Create an admin user and create a postgresql connection, check the files in ```./airflow_config```.
+   - Run the airflow using ```docker-compose up -d``` command.
+   - Navigate to ```http://localhost:8080/``` to track the workflow.
 
 6. **Power BI Dashboard**:
    - Connect Power BI to your PostgreSQL database using the PostgreSQL connector.
-   - Create visualizations based on the data in the `games` table.
+   - Open the ```./dashboard/Chess-Insights.pbix``` file, load your data, and make the necessary adjustments to tailor it to your dataset.
+  
+## Database Schema
+<img src="https://github.com/YoussefAtef91/Chess-ETL-and-Performance-Insights/blob/main/Screenshots/Database%20Schema.png">
 
-## Usage
+## Apache Airflow
+<img src="https://github.com/YoussefAtef91/Chess-ETL-and-Performance-Insights/blob/main/Screenshots/Airflow.png">
 
-1. **Run the Airflow DAG**:
-   - Trigger the DAG from the Airflow UI to start the ETL process.
-
-2. **Visualize Data**:
-   - Open Power BI and use the dashboard to explore and analyze the chess game data.
+## Power BI Dashboard
+<table>
+    <tr>
+        <td><img src="https://github.com/YoussefAtef91/Chess-ETL-and-Performance-Insights/blob/main/Screenshots/PowerBI1.png" alt="Image 1" style="width:100%; height:auto;"></td>
+        <td><img src="https://github.com/YoussefAtef91/Chess-ETL-and-Performance-Insights/blob/main/Screenshots/PowerBI2.png" alt="Image 2" style="width:100%; height:auto;"></td>
+    </tr>
+    <tr>
+        <td><img src="https://github.com/YoussefAtef91/Chess-ETL-and-Performance-Insights/blob/main/Screenshots/PowerBI3.png" alt="Image 3" style="width:100%; height:auto;"></td>
+        <td><img src="https://github.com/YoussefAtef91/Chess-ETL-and-Performance-Insights/blob/main/Screenshots/PowerBI4.png" alt="Image 4" style="width:100%; height:auto;"></td>
+    </tr>
+    <tr>
+       <td><img src="https://github.com/YoussefAtef91/Chess-ETL-and-Performance-Insights/blob/main/Screenshots/PowerBI5.png" alt="Image 4" style="width:100%; height:auto;"></td>
+    </tr>
+</table>
 
 ## Notes
 
 - The Airflow DAG is scheduled to run daily, fetching new game data and updating the database.
-- The Power BI dashboard provides interactive visualizations to analyze game statistics and trends.
+- This Project uses my Lichess and Chess.com usernames, so remember to change them to yours before running the project.
+- The Power BI dashboard provides interactive visualizations to analyze game statistics and trends based on my data, so before using it make the necessary adjustments to tailor it to your dataset.
 
 ## License
 
