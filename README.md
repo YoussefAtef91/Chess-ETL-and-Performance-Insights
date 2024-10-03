@@ -25,7 +25,7 @@ Chess-ETL
 |       |       validations.py # Contains the validation check functions used in the quality_check task  
 │       │  
 │       └───load
-│               load.py # Containes the task to load the validated data into the PostgreSQL  
+│               load.py # Contains the task to load the validated data into the PostgreSQL  
 |  
 ├───dashboard  
 │       Chess-Insights.pbix # A Power BI dashboard connected to PostgreSQL Database  
@@ -115,11 +115,24 @@ Chess-ETL
     </tr>
 </table>
 
+## Usage
+
+Once you have set up the Power BI dashboard, you can analyze your chess performance by exploring the various visualizations. The dashboard includes:
+
+- **Game Statistics**: View metrics such as wins, losses, and draws.
+- **Elo Rating Trends**: Analyze your rating changes over time across different time formats.
+- **Monthly Activity**: Track your daily activity for each month.
+- **Opening Analysis**: Gain insights into the effectiveness of different openings used in your games.
+- **Net Ratings**: Track how your net ratings changes for each month.
+
+Feel free to customize the visualizations to better suit your analysis needs!
+
+
 ## Notes
 
 - The Airflow DAG is scheduled to run daily, fetching new game data and updating the database.
-- This Project uses my Lichess and Chess.com usernames, so remember to change them to yours before running the project.
-- The Power BI dashboard provides interactive visualizations to analyze game statistics and trends based on my data, so before using it make the necessary adjustments to tailor it to your dataset.
+- This Project uses my Lichess and Chess.com usernames, so remember to replace them with yours before running the project.
+- The Power BI dashboard provides interactive visualizations to analyze game statistics and trends based on my data, so make sure to make the necessary adjustments before using it.
 
 ## License
 
